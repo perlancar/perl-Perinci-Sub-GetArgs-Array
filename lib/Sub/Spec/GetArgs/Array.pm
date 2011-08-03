@@ -88,7 +88,13 @@ sub get_args_from_array {
             my $o = $ah0->{arg_pos};
             if (defined($o) && $o == $i) {
                 if ($ah0->{arg_greedy}) {
-                    $args->{$name} = [splice(@array, $i)];
+                    my $type = $schema->{type};
+                    my @elems = splice(@array, $i);
+                    if ($type eq 'array') {
+                        $args->{$name} = \@elems;
+                    } else {
+                        $args->{$name} = join " ", @elems;
+                    }
                     #$log->tracef("assign %s to arg->{$name}", $args->{$name});
                 } else {
                     $args->{$name} = splice(@array, $i, 1);
