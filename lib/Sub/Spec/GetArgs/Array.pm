@@ -84,7 +84,7 @@ sub get_args_from_array {
         #$log->tracef("i=$i");
         while (my ($name, $schema) = each %$args_spec) {
             my $schema = $args_spec->{$name};
-            my $ah0 = $schema->{attr_hashes}[0];
+            my $ah0 = $schema->{clause_sets}[0];
             my $o = $ah0->{arg_pos};
             if (defined($o) && $o == $i) {
                 if ($ah0->{arg_greedy}) {
