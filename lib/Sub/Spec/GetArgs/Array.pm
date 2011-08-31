@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Log::Any '$log';
 
-use Sub::Spec::Utils; # temp, for _parse_schema
+use Data::Sah::Util;
 
 use Exporter;
 our @ISA = qw(Exporter);
@@ -16,7 +16,7 @@ our @EXPORT_OK = qw(get_args_from_array);
 our %SPEC;
 
 sub _parse_schema {
-    Sub::Spec::Utils::_parse_schema(@_);
+    Data::Sah::Util::_parse_schema(@_);
 }
 
 $SPEC{get_args_from_array} = {
