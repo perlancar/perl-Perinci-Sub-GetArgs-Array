@@ -128,8 +128,8 @@ __END__
 
 =head1 DESCRIPTION
 
-This module provides get_args_from_array() (and gencode_get_args_from_array(),
-upcoming). This module is used by, among others, L<Perinci::Sub::GetArgs::Argv>.
+This module provides get_args_from_array(). This module is used by, among
+others, L<Perinci::Sub::GetArgs::Argv>.
 
 This module uses L<Log::Any> for logging framework.
 
