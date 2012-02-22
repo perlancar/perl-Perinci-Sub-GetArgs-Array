@@ -6,85 +6,90 @@ use warnings;
 use Log::Any '$log';
 use Test::More 0.96;
 
-use Sub::Spec::GetArgs::Array qw(get_args_from_array);
+use Perinci::Sub::GetArgs::Array qw(get_args_from_array);
 
-my $spec;
+my $meta;
 
-$spec = {
+$meta = {
+    v => 1.1,
     args => {
-        arg1 => ['str*' => {}],
+        arg1 => {schema=>'str*'},
     },
 };
 test_getargs(
     name=>'no arg -> ok',
-    spec=>$spec, array=>[],
+    meta=>$meta, array=>[],
     status=>200, args=>{},
 );
 test_getargs(
     name=>'extra arg -> 400',
-    spec=>$spec, array=>[1],
+    meta=>$meta, array=>[1],
     status=>400
 );
 test_getargs(
     name=>'allow_extra_elems=1',
-    spec=>$spec, array=>[1], allow_extra_elems=>1,
+    meta=>$meta, array=>[1], allow_extra_elems=>1,
     status=>200, array=>[],
 );
 
-$spec = {
+$meta = {
+    v => 1.1,
     args => {
-        arg1 => ['str*' => {arg_pos=>0}],
-        arg2 => ['str*' => {arg_pos=>1}],
+        arg1 => {schema=>['str*' => {}], pos=>0},
+        arg2 => {schema=>['str*' => {}], pos=>1},
     },
 };
 test_getargs(
     name=>'arg1 only',
-    spec=>$spec, array=>[1],
+    meta=>$meta, array=>[1],
     status=>200, args=>{arg1=>1},
 );
 test_getargs(
     name=>'arg1 & arg2 (1)',
-    spec=>$spec, array=>[1, 2],
+    meta=>$meta, array=>[1, 2],
     status=>200, args=>{arg1=>1, arg2=>2},
 );
 test_getargs(
     name=>'arg1 & arg2 (2)',
-    spec=>$spec, array=>[2, 1],
+    meta=>$meta, array=>[2, 1],
     status=>200, args=>{arg1=>2, arg2=>1},
 );
 
-$spec = {
+$meta = {
+    v => 1.1,
     args => {
-        arg1 => ['array*' => {of=>'str*', arg_pos=>0, arg_greedy=>1}],
+        arg1 => {schema => ['array*' => {of=>'str*'}], pos=>0, greedy=>1},
     },
 };
 test_getargs(
     name=>'arg_greedy (1)',
-    spec=>$spec, array=>[1, 2, 3],
+    meta=>$meta, array=>[1, 2, 3],
     status=>200, args=>{arg1=>[1, 2, 3]},
 );
 
-$spec = {
+$meta = {
+    v => 1.1,
     args => {
-        arg1 => ['str*' => {arg_pos=>0}],
-        arg2 => ['array*' => {of=>'str*', arg_pos=>1, arg_greedy=>1}],
+        arg1 => {schema=>'str*', pos=>0},
+        arg2 => {schema=>['array*' => {of=>'str*'}], pos=>1, greedy=>1},
     },
 };
 test_getargs(
     name=>'arg_greedy (2)',
-    spec=>$spec, array=>[1, 2, 3, 4],
+    meta=>$meta, array=>[1, 2, 3, 4],
     status=>200, args=>{arg1=>1, arg2=>[2, 3, 4]},
 );
 
-$spec = {
+$meta = {
+    v => 1.1,
     args => {
-        arg1 => ['str*' => {arg_pos=>0}],
-        arg2 => ['str*' => {arg_pos=>1, arg_greedy=>1}],
+        arg1 => {schema=>'str*', pos=>0},
+        arg2 => {schema=>'str*', pos=>1, greedy=>1},
     },
 };
 test_getargs(
     name=>'arg_greedy (3, string)',
-    spec=>$spec, array=>[1, 2, 3, 4],
+    meta=>$meta, array=>[1, 2, 3, 4],
     status=>200, args=>{arg1=>1, arg2=>"2 3 4"},
 );
 
@@ -95,7 +100,7 @@ sub test_getargs {
     my (%args) = @_;
 
     subtest $args{name} => sub {
-        my %input_args = (array=>$args{array}, spec=>$args{spec});
+        my %input_args = (array=>$args{array}, meta=>$args{meta});
         for (qw/allow_extra_elems/) {
             $input_args{$_} = $args{$_} if defined $args{$_};
         }
@@ -108,9 +113,11 @@ sub test_getargs {
             is_deeply($res->[2], $args{args}, "result")
                 or diag explain $res->[2];
         }
-        #if ($args{post_test}) {
-        #    $args{post_test}->();
+        #if ($args{posttest}) {
+        #    $args{posttest}->();
         #}
+
+        done_testing();
     };
 }
 
