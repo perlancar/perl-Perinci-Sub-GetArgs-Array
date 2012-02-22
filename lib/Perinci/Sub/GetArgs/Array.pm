@@ -68,9 +68,11 @@ sub get_args_from_array {
     # don't assign this to $array, we have @array too, avoid error-prone
     $input_args{array} or return [400, "Please specify array"];
     my $meta      = $input_args{meta};
-    my $v = $meta->{v} // 1.0;
-    return [412, "Only metadata version 1.1 is supported, given $v"]
-        unless $v == 1.1;
+    if ($meta) {
+        my $v = $meta->{v} // 1.0;
+        return [412, "Only metadata version 1.1 is supported, given $v"]
+            unless $v == 1.1;
+    }
     my $args_p    = $input_args{_args_p}; # allow us to skip cloning
     if (!$args_p) {
         $args_p = clone($meta->{args} // {});
