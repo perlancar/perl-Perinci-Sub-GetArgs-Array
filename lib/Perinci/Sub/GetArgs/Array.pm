@@ -56,7 +56,7 @@ _
             description => <<'_',
 
 If set to 1, then if there are array elements unassigned to one of the arguments
-(due to missing 'arg_pos', for example), instead of generating an error, the
+(due to missing 'pos', for example), instead of generating an error, the
 function will just ignore them.
 
 _
