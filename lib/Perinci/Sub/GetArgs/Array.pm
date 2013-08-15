@@ -46,7 +46,7 @@ _
             schema => ['array*' => {}],
             req => 1,
         },
-        spec => {
+        meta => {
             schema => ['hash*' => {}],
             req => 1,
         },
