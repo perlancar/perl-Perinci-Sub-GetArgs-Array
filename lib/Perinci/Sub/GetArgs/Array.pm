@@ -1,6 +1,6 @@
 package Perinci::Sub::GetArgs::Array;
 
-use 5.010;
+use 5.010001;
 use strict;
 use warnings;
 use Log::Any '$log';
@@ -15,33 +15,6 @@ our @EXPORT_OK = qw(get_args_from_array);
 # VERSION
 
 our %SPEC;
-
-our $re_simple_scalar = qr/^(str|num|int|float|bool)$/;
-
-# retun ($success?, $errmsg, $res)
-sub _parse_json {
-    require JSON;
-
-    my $str = shift;
-
-    state $json = JSON->new->allow_nonref;
-    my $res;
-    eval { $res = $json->decode($str) };
-    my $e = $@;
-    return (!$e, $e, $res);
-}
-
-sub _parse_yaml {
-    require YAML::Syck;
-
-    my $str = shift;
-
-    local $YAML::Syck::ImplicitTyping = 1;
-    my $res;
-    eval { $res = YAML::Syck::Load($str) };
-    my $e = $@;
-    return (!$e, $e, $res);
-}
 
 $SPEC{get_args_from_array} = {
     v => 1.1,
