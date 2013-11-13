@@ -47,9 +47,9 @@ _
             req => 1,
             description => <<'_',
 
-NOTE: array will be modified (elements will be taken from the array as it is put
-into the resulting args). Copy your array first if you want to preserve its
-content.
+NOTE: array will be modified/emptied (elements will be taken from the array as
+they are put into the resulting args). Copy your array first if you want to
+preserve its content.
 
 _
         },
