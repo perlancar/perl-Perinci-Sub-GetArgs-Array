@@ -45,6 +45,13 @@ _
         array => {
             schema => ['array*' => {}],
             req => 1,
+            description => <<'_',
+
+NOTE: array will be modified (elements will be taken from the array as it is put
+into the resulting args). Copy your array first if you want to preserve its
+content.
+
+_
         },
         meta => {
             schema => ['hash*' => {}],
@@ -65,9 +72,8 @@ _
 };
 sub get_args_from_array {
     my %input_args = @_;
-    # don't assign this to $array, we have @array too, avoid error-prone
-    $input_args{array} or return [400, "Please specify array"];
-    my $meta      = $input_args{meta};
+    my $ary  = $input_args{array} or return [400, "Please specify array"];
+    my $meta = $input_args{meta};
     if ($meta) {
         my $v = $meta->{v} // 1.0;
         return [412, "Only metadata version 1.1 is supported, given $v"]
@@ -84,17 +90,16 @@ sub get_args_from_array {
     return [400, "Please specify meta"] if !$meta && !$args_p;
     #$log->tracef("-> get_args_from_array(), array=%s", $array);
 
-    my @array = @{$input_args{array}};
     my $args = {};
 
-    for my $i (reverse 0..$#array) {
+    for my $i (reverse 0..@$ary-1) {
         #$log->tracef("i=$i");
         while (my ($a, $as) = each %$args_p) {
             my $o = $as->{pos};
             if (defined($o) && $o == $i) {
                 if ($as->{greedy}) {
                     my $type = $as->{schema}[0];
-                    my @elems = splice(@array, $i);
+                    my @elems = splice(@$ary, $i);
                     if ($type eq 'array') {
                         $args->{$a} = \@elems;
                     } else {
@@ -102,7 +107,7 @@ sub get_args_from_array {
                     }
                     #$log->tracef("assign %s to arg->{$a}", $args->{$a});
                 } else {
-                    $args->{$a} = splice(@array, $i, 1);
+                    $args->{$a} = splice(@$ary, $i, 1);
                     #$log->tracef("assign %s to arg->{$a}", $args->{$a});
                 }
             }
@@ -110,7 +115,7 @@ sub get_args_from_array {
     }
 
     return [400, "There are extra, unassigned elements in array: [".
-                join(", ", @array)."]"] if @array && !$allow_extra_elems;
+                join(", ", @$ary)."]"] if @$ary && !$allow_extra_elems;
 
     [200, "OK", $args];
 }
