@@ -21,9 +21,9 @@ $SPEC{get_args_from_array} = {
     summary => 'Get subroutine arguments (%args) from array',
     description => <<'_',
 
-Using information in metadata's 'args' property (particularly the 'pos' and
-'greedy' arg type clauses), extract arguments from an array into a hash
-\%args, suitable for passing into subs.
+Using information in metadata's `args` property (particularly the `pos` and
+`greedy` arg type clauses), extract arguments from an array into a hash
+`\%args`, suitable for passing into subs.
 
 Example:
 
@@ -36,7 +36,7 @@ Example:
         }
     }
 
-then 'get_args_from_array(array=>[2, 3], meta=>$meta)' will produce:
+then `get_args_from_array(array=>[2, 3], meta=>$meta)` will produce:
 
     [200, "OK", {a=>2, b=>3}]
 
@@ -63,7 +63,7 @@ _
             description => <<'_',
 
 If set to 1, then if there are array elements unassigned to one of the arguments
-(due to missing 'pos', for example), instead of generating an error, the
+(due to missing `pos`, for example), instead of generating an error, the
 function will just ignore them.
 
 _
