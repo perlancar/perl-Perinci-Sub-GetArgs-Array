@@ -5,7 +5,6 @@ use strict;
 use warnings;
 use Log::Any '$log';
 
-use Data::Clone;
 use Data::Sah;
 
 use Exporter;
@@ -71,6 +70,8 @@ _
     },
 };
 sub get_args_from_array {
+    require SHARYANTO::MaybeXS;
+
     my %input_args = @_;
     my $ary  = $input_args{array} or return [400, "Please specify array"];
     my $meta = $input_args{meta};
@@ -81,7 +82,7 @@ sub get_args_from_array {
     }
     my $args_p    = $input_args{_args_p}; # allow us to skip cloning
     if (!$args_p) {
-        $args_p = clone($meta->{args} // {});
+        $args_p = SHARYANTO::MaybeXS::clone($meta->{args} // {});
         while (my ($a, $as) = each %$args_p) {
             $as->{schema} = Data::Sah::normalize_schema($as->{schema} // 'any');
         }
