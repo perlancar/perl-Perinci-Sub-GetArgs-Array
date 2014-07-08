@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Log::Any '$log';
 
-use Data::Sah;
+use Data::Sah::Normalize qw(normalize_schema);
 use Function::Fallback::CoreOrPP qw(clone);
 
 use Exporter;
@@ -83,7 +83,7 @@ sub get_args_from_array {
     if (!$args_p) {
         $args_p = clone($meta->{args} // {});
         while (my ($a, $as) = each %$args_p) {
-            $as->{schema} = Data::Sah::normalize_schema($as->{schema} // 'any');
+            $as->{schema} = normalize_schema($as->{schema} // 'any');
         }
     }
     my $allow_extra_elems = $input_args{allow_extra_elems} // 0;
