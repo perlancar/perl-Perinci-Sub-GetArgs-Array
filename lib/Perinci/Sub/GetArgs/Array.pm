@@ -55,7 +55,8 @@ _
             req => 1,
         },
         meta_is_normalized => {
-            summary => 'Can be set to 1 if your metadata is normalized, to ',
+            summary => 'Can be set to 1 if your metadata is normalized, '.
+                'to avoid duplicate effort',
             schema => 'bool',
             default => 0,
         },
