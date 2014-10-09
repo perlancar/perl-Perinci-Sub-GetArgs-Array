@@ -1,5 +1,8 @@
 package Perinci::Sub::GetArgs::Array;
 
+# DATE
+# VERSION
+
 use 5.010001;
 use strict;
 use warnings;
@@ -8,8 +11,6 @@ use warnings;
 use Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(get_args_from_array);
-
-# VERSION
 
 our %SPEC;
 
