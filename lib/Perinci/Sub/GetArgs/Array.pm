@@ -14,6 +14,10 @@ our @EXPORT_OK = qw(get_args_from_array);
 
 our %SPEC;
 
+$SPEC{':package'} = {
+    v => 1.1,
+};
+
 $SPEC{get_args_from_array} = {
     v => 1.1,
     summary => 'Get subroutine arguments (%args) from array',
@@ -117,8 +121,7 @@ sub get_args_from_array {
 }
 
 1;
-#ABSTRACT: Get subroutine arguments from array
-__END__
+#ABSTRACT:
 
 =head1 SYNOPSIS
 
