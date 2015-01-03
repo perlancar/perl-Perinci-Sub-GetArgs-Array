@@ -136,13 +136,6 @@ This module provides get_args_from_array(). This module is used by, among
 others, L<Perinci::Sub::GetArgs::Argv>.
 
 
-=head1 TODO
-
-I am not particularly happy with the duplication of functionality between this
-and the 'args_as' handler in L<Perinci::Sub::Wrapper>. But the later is a code
-to generate code, so I guess it's not so bad for now.
-
-
 =head1 SEE ALSO
 
 L<Perinci>
