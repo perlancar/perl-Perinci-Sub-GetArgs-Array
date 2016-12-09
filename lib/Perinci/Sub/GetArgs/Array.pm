@@ -102,6 +102,15 @@ sub get_args_from_array {
                     my @elems = splice(@$ary, $i);
                     if ($type eq 'array') {
                         $rargs->{$a} = \@elems;
+                    } elsif ($type eq 'hash') {
+                        $rargs->{$a} = {};
+                        for my $j (0..$#elems) {
+                            my $elem = $elems[$j];
+                            unless ($elem =~ /(.*?)=(.*)/) {
+                                return [400, "Invalid key=value pair in element #$j"];
+                            }
+                            $rargs->{$a}{$1} = $2;
+                        }
                     } else {
                         $rargs->{$a} = join " ", @elems;
                     }
