@@ -69,7 +69,7 @@ subtest "greedy (str)" => sub {
     );
 };
 
-subtest "greedy (array of simple)" => sub {
+subtest "greedy (array)" => sub {
     my $meta = {
         v => 1.1,
         args => {
@@ -96,7 +96,7 @@ subtest "greedy (array of simple)" => sub {
     );
 };
 
-subtest "greedy (hash of simple)" => sub {
+subtest "greedy (hash)" => sub {
     my $meta = {
         v => 1.1,
         args => {
