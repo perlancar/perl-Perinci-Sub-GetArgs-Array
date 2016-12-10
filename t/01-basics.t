@@ -54,43 +54,74 @@ test_getargs(
     status=>200, args=>{arg1=>2, arg2=>1}, remaining_array=>[],
 );
 
-$meta = {
-    v => 1.1,
-    args => {
-        arg1 => {schema => ['array*' => {of=>'str*'}], pos=>0, greedy=>1},
-    },
+subtest "greedy (str)" => sub {
+    my $meta = {
+        v => 1.1,
+        args => {
+            arg1 => {schema=>'str*', pos=>0},
+            arg2 => {schema=>'str*', pos=>1, greedy=>1},
+        },
+    };
+    test_getargs(
+        name=>'arg_greedy (3, string)',
+        meta=>$meta, array=>[1, 2, 3, 4],
+        status=>200, args=>{arg1=>1, arg2=>"2 3 4"}, remaining_array=>[],
+    );
 };
-test_getargs(
-    name=>'arg_greedy (1)',
-    meta=>$meta, array=>[1, 2, 3],
-    status=>200, args=>{arg1=>[1, 2, 3]}, remaining_array=>[],
-);
 
-$meta = {
-    v => 1.1,
-    args => {
-        arg1 => {schema=>'str*', pos=>0},
-        arg2 => {schema=>['array*' => {of=>'str*'}], pos=>1, greedy=>1},
-    },
-};
-test_getargs(
-    name=>'arg_greedy (2)',
-    meta=>$meta, array=>[1, 2, 3, 4],
-    status=>200, args=>{arg1=>1, arg2=>[2, 3, 4]}, remaining_array=>[],
-);
+subtest "greedy (array of simple)" => sub {
+    my $meta = {
+        v => 1.1,
+        args => {
+            arg1 => {schema => ['array*' => {of=>'str*'}], pos=>0, greedy=>1},
+        },
+    };
+    test_getargs(
+        name=>'arg_greedy (1)',
+        meta=>$meta, array=>[1, 2, 3],
+        status=>200, args=>{arg1=>[1, 2, 3]}, remaining_array=>[],
+    );
 
-$meta = {
-    v => 1.1,
-    args => {
-        arg1 => {schema=>'str*', pos=>0},
-        arg2 => {schema=>'str*', pos=>1, greedy=>1},
-    },
+    $meta = {
+        v => 1.1,
+        args => {
+            arg1 => {schema=>'str*', pos=>0},
+            arg2 => {schema=>['array*' => {of=>'str*'}], pos=>1, greedy=>1},
+        },
+    };
+    test_getargs(
+        name=>'arg_greedy (2)',
+        meta=>$meta, array=>[1, 2, 3, 4],
+        status=>200, args=>{arg1=>1, arg2=>[2, 3, 4]}, remaining_array=>[],
+    );
 };
-test_getargs(
-    name=>'arg_greedy (3, string)',
-    meta=>$meta, array=>[1, 2, 3, 4],
-    status=>200, args=>{arg1=>1, arg2=>"2 3 4"}, remaining_array=>[],
-);
+
+subtest "greedy (hash of simple)" => sub {
+    my $meta = {
+        v => 1.1,
+        args => {
+            arg1 => {schema => ['hash*' => {of=>'str*'}], pos=>0, greedy=>1},
+        },
+    };
+    test_getargs(
+        name=>'arg_greedy (1)',
+        meta=>$meta, array=>[qw/a=1 b=2 c=3/],
+        status=>200, args=>{arg1=>{a=>1, b=>2, c=>3}}, remaining_array=>[],
+    );
+
+    $meta = {
+        v => 1.1,
+        args => {
+            arg1 => {schema=>'str*', pos=>0},
+            arg2 => {schema=>['hash*' => {of=>'str*'}], pos=>1, greedy=>1},
+        },
+    };
+    test_getargs(
+        name=>'arg_greedy (2)',
+        meta=>$meta, array=>[qw/a=1 b=2 c=3 d=4/],
+        status=>200, args=>{arg1=>'a=1', arg2=>{b=>2, c=>3, d=>4}}, remaining_array=>[],
+    );
+};
 
 DONE_TESTING:
 done_testing();
