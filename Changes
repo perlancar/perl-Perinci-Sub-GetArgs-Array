@@ -1,5 +1,3 @@
-Revision history for Perinci-Sub-GetArgs-Array
-
 0.16    2016-12-10 (PERLANCAR)
 
 	- Accept hash argument using key1=val1 key2=val2 ...
