@@ -24,7 +24,7 @@ $SPEC{get_args_from_array} = {
     description => <<'_',
 
 Using information in metadata's `args` property (particularly the `pos` and
-`greedy` arg type clauses), extract arguments from an array into a hash
+`slurpy` arg type clauses), extract arguments from an array into a hash
 `\%args`, suitable for passing into subs.
 
 Example:
@@ -97,7 +97,7 @@ sub get_args_from_array {
         while (my ($a, $as) = each %$args_p) {
             my $o = $as->{pos};
             if (defined($o) && $o == $i) {
-                if ($as->{greedy}) {
+                if ($as->{slurpy} // $as->{greedy}) {
                     my $type = $as->{schema}[0];
                     my @elems = splice(@$ary, $i);
                     if ($type eq 'array') {
